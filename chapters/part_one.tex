@@ -1,0 +1,69 @@
+\section{Code}
+\subsection{Python}
+\begin{minted}{python}
+import sys
+import fontforge
+
+def convert_to_otf(path: str):
+    font = fontforge.open(path)
+    new_file_name = path.replace(".ttf", ".otf")
+    font.generate(new_file_name)
+
+if __name__ == "__main__":
+    for p in sys.argv[1:]:
+        convert_to_otf(p)
+\end{minted}
+
+\subsection{AWK}
+\subsubsection{Password-File Checking}
+The password file on a Unix system contains the name of and other information
+about authorized users. Each line of the password file has 7 fields, seperated
+by colons:
+\small\begin{verbatim}
+    root:qyxRi2uhuVjrg:0:2::/:
+    bwk:1L./v6iblzzNE:9:1:Brian Kerninghan:/usr/bwk:
+    ava:otxs1oTVoyvMQ:15:1:Al Aho:/usr/ava:
+    uucp:xutIBs2hKtcls:48:1:uucp daemon:/usr/lib/uucp:uucico
+    pjw:xNqy//GDc8FFg:170:2:Peter Winberger:/usr/pjw:
+    mark:j0z1fuQmqIvdE:374:1:Mark Kernighan:/usr/bwk/mark:
+    ...
+\end{verbatim}
+\normalsize
+The first field is the user's login name, which should be alphanumeric. The
+second is an encrypted version of the password; if this field is empty, anyone
+can log in pretending to be that user, while if there is a password, only
+people who know the password can log in. The third and fourth fields are
+supposed to be numeric. The sixth field should begin with /. The following
+program prints all lines that fail to satisfy these criteria, along with the
+number of the erroneous line and an approritate diagnostic message. Running
+this program every night is a small part of keeping a system healthy and safe
+from intruders.
+
+\begin{minted}{awk}
+    # passwd - check password file
+
+    BEGIN {
+        FS = ":" }
+    NF != 7 {
+        printf("line %d, does not have 7 fields: %s\n", NR, $0) }
+    $1 ~ /[^A-Za-z0-9]/ {
+        printf("line %d, nonalpanumeric user id: %s\n", NR, $0) }
+    $2 == "" {
+        printf("line %d, no password: %s\n", NR, $0) }
+    $3 ~ /[^0-9]/ {
+        printf("line %d, nonumeric user id: %s\n", NR, $0) }
+    $4 ~ /[^0-9]/ {
+        printf("line %d, nonnumeric group id: %s\n", NR, $0) }
+    $6 !~ /^\// {
+        printf("line %d, invalid login directory: %s\n", NR, $0) }
+\end{minted}
+
+
+\section{Slanted}
+\textsl{\lipsum[1]}
+
+\section{Italic}
+\textit{\lipsum[2]}
+
+\section{Bold}
+\textbf{\lipsum[4]}
