@@ -1,69 +1,83 @@
-\section{Code}
-\subsection{Python}
-\begin{minted}{python}
-import sys
-import fontforge
+\section{Console Application}
+Given the library \texttt{st4-scfs-sensors-1.0.0.jar} that consist of the following classes;
+\texttt{CO2Sensor} - An object oriented representation of a $CO_{2}$ Sensor.
+\texttt{TemperatureSensor} - An object oriented representation of a temperature
+sensor.
+\texttt{Test} - A class, which shows the initialisation and usage of the sensors.
+Furthermore an interface \texttt{ISensor} which describes the contract that all
+concrete sensors in the system should adhere to.
+Any code change in the provided files are not permitted.
 
-def convert_to_otf(path: str):
-    font = fontforge.open(path)
-    new_file_name = path.replace(".ttf", ".otf")
-    font.generate(new_file_name)
-
-if __name__ == "__main__":
-    for p in sys.argv[1:]:
-        convert_to_otf(p)
-\end{minted}
-
-\subsection{AWK}
-\subsubsection{Password-File Checking}
-The password file on a Unix system contains the name of and other information
-about authorized users. Each line of the password file has 7 fields, seperated
-by colons:
-\small\begin{verbatim}
-    root:qyxRi2uhuVjrg:0:2::/:
-    bwk:1L./v6iblzzNE:9:1:Brian Kerninghan:/usr/bwk:
-    ava:otxs1oTVoyvMQ:15:1:Al Aho:/usr/ava:
-    uucp:xutIBs2hKtcls:48:1:uucp daemon:/usr/lib/uucp:uucico
-    pjw:xNqy//GDc8FFg:170:2:Peter Winberger:/usr/pjw:
-    mark:j0z1fuQmqIvdE:374:1:Mark Kernighan:/usr/bwk/mark:
-    ...
+Given these conditions, develop a console application that can print the values
+of these two sensor types.
+\begin{figure}
+\caption{Tree folder structure of the source code}
+\centering
+\footnotesize
+\begin{verbatim}
+src/main/java/dev/nymann/
+├── domain
+│   ├── commands
+│   │   ├── AddSensorCommand.java
+│   │   ├── CommandFactory.java
+│   │   ├── Command.java
+│   │   ├── ICommandFactory.java
+│   │   ├── ICommand.java
+│   │   ├── ListSensorsCommand.java
+│   │   ├── ReadSensorCommand.java
+│   │   └── RemoveSensorCommand.java
+│   ├── exceptions
+│   │   ├── CommandExecutionException.java
+│   │   └── SensorNotFoundException.java
+│   └── sensors
+│       ├── ISensorFactory.java
+│       ├── ISensorService.java
+│       ├── SensorFactory.java
+│       └── SensorService.java
+├── Main.java
+├── presentation
+│   └── Client.java
+└── sensor
+    ├── CO2SensorAdapter.java
+    ├── ISensor.java
+    ├── Sensor.java
+    └── TemperatureSensorAdapter.java
 \end{verbatim}
 \normalsize
-The first field is the user's login name, which should be alphanumeric. The
-second is an encrypted version of the password; if this field is empty, anyone
-can log in pretending to be that user, while if there is a password, only
-people who know the password can log in. The third and fourth fields are
-supposed to be numeric. The sixth field should begin with /. The following
-program prints all lines that fail to satisfy these criteria, along with the
-number of the erroneous line and an approritate diagnostic message. Running
-this program every night is a small part of keeping a system healthy and safe
-from intruders.
+\end{figure}
 
-\begin{minted}{awk}
-    # passwd - check password file
+\begin{figure}
+\caption{Multilayer architecture overview}
+\centering
+\includegraphics[scale=0.8]{part_1/components}
+\end{figure}
 
-    BEGIN {
-        FS = ":" }
-    NF != 7 {
-        printf("line %d, does not have 7 fields: %s\n", NR, $0) }
-    $1 ~ /[^A-Za-z0-9]/ {
-        printf("line %d, nonalpanumeric user id: %s\n", NR, $0) }
-    $2 == "" {
-        printf("line %d, no password: %s\n", NR, $0) }
-    $3 ~ /[^0-9]/ {
-        printf("line %d, nonumeric user id: %s\n", NR, $0) }
-    $4 ~ /[^0-9]/ {
-        printf("line %d, nonnumeric group id: %s\n", NR, $0) }
-    $6 !~ /^\// {
-        printf("line %d, invalid login directory: %s\n", NR, $0) }
-\end{minted}
+\begin{figure}
+\caption{Sensor layer class diagram}
+\centering
+\includegraphics[width=1\textwidth]{part_1/sensor}
+\end{figure}
 
+\begin{figure}
+\caption{Commands package in the domain layer}
+\centering
+\includegraphics[width=1\textwidth]{part_1/domain-commands}
+\end{figure}
 
-\section{Slanted}
-\textsl{\lipsum[1]}
+\begin{figure}
+\caption{Sensors package in the domain layer}
+\centering
+\includegraphics[width=1\textwidth]{part_1/domain-sensors}
+\end{figure}
 
-\section{Italic}
-\textit{\lipsum[2]}
+\begin{figure}
+\caption{Exceptions package in the domain layer }
+\centering
+\includegraphics[width=0.4\textwidth]{part_1/domain-exceptions}
+\end{figure}
 
-\section{Bold}
-\textbf{\lipsum[4]}
+\begin{figure}
+\caption{Presentation layer class diagram}
+\centering
+\includegraphics[width=1\textwidth]{part_1/presentation}
+\end{figure}

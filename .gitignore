@@ -7,3 +7,4 @@ tags
 *.out
 *.toc
 _minted-report/
+report.synctex.gz

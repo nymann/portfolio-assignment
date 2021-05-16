@@ -1,0 +1,23 @@
+@startuml
+skinparam shadowing false
+skinparam classFontName Lato
+skinparam defaultFontName Source Code Pro
+skinparam defaultFontSize 14
+skinparam PackageBackgroundColor white
+skinparam ArrowColor black
+skinparam linetype ortho
+
+package Presentation
+
+
+package Domain {
+  package Commands
+  package Sensors
+  package Exceptions
+}
+
+package Sensor
+
+Presentation ...> Domain
+Domain ...> Sensor
+@enduml
