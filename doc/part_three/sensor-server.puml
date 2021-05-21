@@ -1,0 +1,24 @@
+@startuml
+skinparam roundCorner 10
+skinparam shadowing false
+skinparam classFontName Lato
+skinparam classFontSize 16
+skinparam defaultFontName Source Code Pro
+skinparam defaultFontSize 14
+skinparam ClassAttributeFontStyle normal
+skinparam ClassBackgroundColor white
+skinparam ClassBorderColor black
+skinparam ClassBorderThickness 1
+skinparam ArrowColor black
+skinparam linetype polyline
+class dev.nymann.sensor_server.Subject {
++ void run()
+}
+class dev.nymann.sensor_server.SensorServer {
++ void start()
++ void stop()
+}
+
+
+dev.nymann.sensor_server.Runnable <|.. dev.nymann.sensor_server.Subject
+@enduml

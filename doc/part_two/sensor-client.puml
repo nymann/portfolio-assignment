@@ -1,0 +1,44 @@
+@startuml
+skinparam roundCorner 10
+skinparam shadowing false
+skinparam classFontName Lato
+skinparam classFontSize 16
+skinparam defaultFontName Source Code Pro
+skinparam defaultFontSize 14
+skinparam ClassAttributeFontStyle normal
+skinparam ClassBackgroundColor white
+skinparam ClassBorderColor black
+skinparam ClassBorderThickness 1
+skinparam ArrowColor black
+skinparam linetype polyline
+interface dev.nymann.sensor_client.domain.commands.ICommandFactory {
++ ICommand makeFromString(String)
+}
+abstract class dev.nymann.sensor_client.domain.commands.Command {
+# List<String> args
+# HashMap<String,Communication> serverCommunication
++ {abstract}String execute()
++ {abstract}void validateArguments()
+}
+class dev.nymann.sensor_client.domain.Communication {
++ String sendMessage(String)
+}
+class dev.nymann.sensor_client.domain.commands.CommandFactory {
+~ HashMap<String,Communication> sensorCommunication
++ ICommand makeFromString(String)
+}
+class dev.nymann.sensor_client.domain.commands.ReadSensorCommand {
++ String execute()
++ void validateArguments()
+}
+class dev.nymann.sensor_client.presentation.Client {
+}
+interface dev.nymann.sensor_client.domain.commands.ICommand {
+~ String execute()
+~ void validateArguments()
+}
+
+dev.nymann.sensor_client.domain.commands.ICommand <|.. dev.nymann.sensor_client.domain.commands.Command
+dev.nymann.sensor_client.domain.commands.ICommandFactory <|.. dev.nymann.sensor_client.domain.commands.CommandFactory
+dev.nymann.sensor_client.domain.commands.Command <|-- dev.nymann.sensor_client.domain.commands.ReadSensorCommand
+@enduml
